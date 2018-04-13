@@ -1,0 +1,30 @@
+version: '3.2'
+services:
+  helix-mysql:
+    container_name: helix-mysql
+    image: mysql:5.7
+    environment:
+     MYSQL_ROOT_PASSWORD: password
+     MYSQL_DATABASE: helixdatabase
+    ports:
+      - 3306:3306
+    volumes:
+      - type: volume
+        source: helix-mysql-persistent-storage
+        target: /var/lib/mysql
+    networks:
+      - helixnetwork
+  helix-web:
+    container_name: helix-web
+    image: helix-web
+    depends_on:
+      - helix-mysql
+    ports:
+      - 8081:8081
+    networks:
+      - helixnetwork
+
+volumes:
+  helix-mysql-persistent-storage:
+networks:
+  helixnetwork:
